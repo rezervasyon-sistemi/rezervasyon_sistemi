@@ -32,7 +32,7 @@
   <body class="nav-md">
     <div class="container body">
       <div class="main_container">
-        <div class="col-md-3 left_col">
+		<div class="col-md-3 left_col menu_fixed">
           <div class="left_col scroll-view">
              
 
@@ -72,12 +72,18 @@
                      
                   </li>
 				  
-				  <li><a href="apart_durumlari.html"><i class="fa fa-table"></i> Apart Durumları </a>
-                    
+				  <li><a><i class="fa fa-table"></i> Apart Durumları <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="tables.html">Aparta Göre</a></li>
+                      <li><a href="tables_dynamic.html">Tarihe Göre</a></li>
+                    </ul>
                   </li>
 				  
-				<li><a href="istatistikler.html"><i class="fa fa-table"></i> İstatistikler</a>
-                  
+				<li><a><i class="fa fa-table"></i> İstatistik <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="tables.html">Gelir Durumu</a></li>
+                      <li><a href="tables_dynamic.html">Doluluk Oranları</a></li>
+                    </ul>
                 </li>
 				  
                 </ul>
@@ -139,21 +145,66 @@
           
           <!-- /top tiles -->
 
-          <div class="row">
-            <div class="col-md-12 col-sm-12 col-xs-12">
-              <div class="dashboard_graph">
 
-                <div class="row x_title">
-                   
-				  <h2 align="center">Apart Aktif Et</h2>
+        
+			<div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Apart Aktif Et</h2>
+                     
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <br />
+                    <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+
+					<div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Apartı Seçiniz</label>
+                        <div class="col-md-3 col-sm-6 col-xs-12">
+                          <select class="select2_single form-control" tabindex="-1">
+                            <option value="A1">Apart-1</option>
+                            <option value="A2">Apart-2</option>
+                            <option value="A3">Apart-3</option>
+                          </select>
+                        </div>
+                      </div>
+					  
+					<div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Yılı Seçiniz</label>
+                        <div class="col-md-3 col-sm-6 col-xs-12">
+                          <select class="select2_single form-control" tabindex="-1">
+                            <option value="17">2017</option>
+                            <option value="18">2018</option>
+                            <option value="19">2019</option>
+							<option value="20">2020</option>
+							<option value="21">2021</option>
+							<option value="22">2022</option>
+							<option value="23">2023</option>
+							<option value="24">2024</option>
+							<option value="25">2025</option>
+                          </select>
+                        </div>
+                      </div>					  
+					  
+					
+                      <div class="ln_solid"></div>
+                      <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                          <button class="btn btn-primary" type="button">İptal</button>
+                          <button type="submit" class="btn btn-success">Tamamla</button>
+                        </div>
+                      </div>
+
+                    </form>
+                  </div>
                 </div>
-				İçerik Kısmı
               </div>
             </div>
-          </div>
-           
+		
            
         </div>
+		
         <!-- /page content -->
 
          
