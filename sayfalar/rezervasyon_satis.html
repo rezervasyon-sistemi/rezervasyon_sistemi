@@ -16,8 +16,7 @@
     <!-- NProgress -->
     <link href="../vendors/nprogress/nprogress.css" rel="stylesheet">
     <!-- iCheck -->
-    <link href="../vendors/iCheck/skins/flat/green.css" rel="stylesheet">
-	
+    <link href="../vendors/iCheck/skins/flat/green.css" rel="stylesheet">	
     <!-- bootstrap-progressbar -->
     <link href="../vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
     <!-- JQVMap -->
@@ -32,7 +31,7 @@
   <body class="nav-md">
     <div class="container body">
       <div class="main_container">
-        <div class="col-md-3 left_col">
+		<div class="col-md-3 left_col menu_fixed">
           <div class="left_col scroll-view">
              
 
@@ -72,13 +71,13 @@
                      
                   </li>
 				  
-				 <li><a href="apart_durumlari.html"><i class="fa fa-table"></i> Apart Durumları </a>
+				  <li><a href="apart_durumlari.html"><i class="fa fa-table"></i> Apart Durumları </a>
                     
                   </li>
 				  
 				<li><a href="istatistikler.html"><i class="fa fa-table"></i> İstatistikler</a>
                   
-                  </li>
+                </li>
 				  
                 </ul>
               </div>
@@ -139,21 +138,132 @@
           
           <!-- /top tiles -->
 
-          <div class="row">
-            <div class="col-md-12 col-sm-12 col-xs-12">
-              <div class="dashboard_graph">
 
-                <div class="row x_title">
-                   
-				  <h2 align="center">Rezervasyon Satış</h2>
+        
+			<div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Rezervasyon Ara</h2>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <br />
+                    <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Müşteri Adı <span class="required">*</span>
+                        </label>
+                        <div class="col-md-3 col-sm-6 col-xs-12">
+                          <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Müşteri Soyadı <span class="required">*</span>
+                        </label>
+                        <div class="col-md-3 col-sm-6 col-xs-12">
+                          <input type="text" id="last-name" name="last-name" required="required" class="form-control col-md-7 col-xs-12">
+                        </div>
+                      </div>
+					  				  
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Giriş Tarihi <span class="required">*</span>
+                        </label>						
+                        <div class="col-md-3 col-sm-6 col-xs-12">
+                          <input type="text" class="form-control" required="required" data-inputmask="'mask': '99/99/9999'">
+                          <span class="fa fa-calendar form-control-feedback right" aria-hidden="true"></span>
+                        </div>
+                      </div>
+					  
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Çıkış Tarihi <span class="required">*</span>
+                        </label>
+                        <div class="col-md-3 col-sm-6 col-xs-12">
+                          <input type="text" class="form-control" required="required" data-inputmask="'mask': '99/99/9999'">
+                          <span class="fa fa-calendar form-control-feedback right" aria-hidden="true"></span>
+                        </div>
+                      </div>
+									  
+                      <div class="ln_solid"></div>
+                      <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                          <button class="btn btn-primary" type="button">İptal</button>
+                          <button type="submit" class="btn btn-success">Ara</button>
+                        </div>
+                      </div>
+
+                    </form>
+					
+                  </div>
                 </div>
-				İçerik Kısmı
               </div>
             </div>
-          </div>
-           
+			
+			
+			<div class="col-md-6 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Rezervasyon Satış Onayı</h2>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <br />
+							  
+			<table class="table table-hover">
+                    <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Apart Adı</th>						  
+                          <th>Müşteri Adı</th>
+                          <th>Müşteri Soyadı</th>
+						  <th>Giriş Tarihi</th>
+						  <th>Çıkış Tarihi</th>
+						  <th>Anlaşılan Tutar</th>
+						  <th>Alınan Kapora</th>						  
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                          <th scope="row">1</th>
+                          <th>Apart-1</th>
+                          <th>Yunus Emre</th>
+                          <th>Küçük</th>
+						  <th>17.06.2017</th>
+						  <th>20.06.2017</th>
+						  <th>300</th>
+						  <th>100</th>
+                        </tr>
+					</tbody>
+			</table>
+
+				<form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">				  
+				    
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Tahsil Edilecek Tutar <span class="required">*</span>
+                        </label>
+                        <div class="col-md-2 col-sm-6 col-xs-12">
+                          <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12">
+                        </div>
+                        <label class="control-label">TL
+                        </label>
+                      </div>
+					  
+					<div class="ln_solid"></div>
+                      <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                          <button class="btn btn-primary" type="button">İptal</button>
+                          <button type="submit" class="btn btn-success">Tamamla</button>
+                        </div>
+                    </div>
+				</form>  
+				  
+		         </div>
+                </div>
+            </div>
+		
            
         </div>
+		
         <!-- /page content -->
 
          
@@ -183,7 +293,7 @@
     <script src="../vendors/Flot/jquery.flot.pie.js"></script>
     <script src="../vendors/Flot/jquery.flot.time.js"></script>
     <script src="../vendors/Flot/jquery.flot.stack.js"></script>
-    <script src="../vendors/Flot/jquery.flot.resize.js"></script>
+    <script src="../vendors/Flot/jquery.flot.resize.js"></script>	
     <!-- Flot plugins -->
     <script src="../vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
     <script src="../vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
@@ -200,6 +310,8 @@
 
     <!-- Custom Theme Scripts -->
     <script src="../build/js/custom.min.js"></script>
+	<!-- jquery.inputmask -->
+    <script src="../vendors/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
 	
   </body>
 </html>
