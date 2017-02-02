@@ -2,26 +2,24 @@
 	
 	include "../fonksiyonlar/vt_baglantisi.php";
 	header('Content-Type: text/html; charset=utf-8');
+	$result='';
 	
 	if( isset($_POST['apart_adi']) && isset($_POST['oda_tipi']) )
 	{
 		$conn=vtBaglantisi();
 		$apartAdi=$_POST['apart_adi'];
 		$odaTipi=$_POST['oda_tipi'];
-		
-		//INSERT INTO `apart` (`id`, `apart_no`, `oda_tipi`) VALUES (NULL, 'Apart-1', '2+1');
-		//$sql = "INSERT INTO `musteri` (`id`, `tc`, `ad`, `soyad`, `telefon`, `adres`) VALUES (NULL, \'11111111111\', \'Yunus Emre\', \'Küçük\', \'05555555555\', \'Barışkent Çanakkale Merkez\')";
-	
+		  
 		$sql = "INSERT INTO apart (id, apart_no, oda_tipi) VALUES (NULL, '$apartAdi', '$odaTipi') ";
 		if (mysqli_query($conn, $sql)) 
 		{
-			echo "Apart Başarıyla Eklenmiştir!";
+			$result='<div class="alert alert-success alert-dismissible fade in"><strong>Apart Başarıyla Sisteme Eklenmiştir!</strong></div>';
 		} 
 		else 
 		{
-			echo "Apart Eklenememiştir! " . $sql . "<br>" . mysqli_error($conn);
-		}
-
+			//echo "Apart Eklenememiştir! " . $sql . "<br>" . mysqli_error($conn);
+			$result='<div class="alert alert-danger alert-dismissible fade in"><strong>Apart Sisteme Eklenememiştir! Hata: '.mysqli_error($conn).'</strong></div>';
+		} 
 		mysqli_close($conn);
 	}
 
@@ -36,7 +34,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Rezervasyon Sistemi </title>
+    <title>Rezervasyon Sistemi</title>
 
     <!-- Bootstrap -->
     <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -120,7 +118,7 @@
         <!-- /top navigation -->
         <!-- page content -->
         <div class="right_col" role="main">
-          
+           
           <!-- /top tiles -->
 			 
 			<div class="row">
@@ -131,7 +129,7 @@
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
-                    <br />
+                    <br/>
                     <form align="center" id="demo-form2" method="POST" data-parsley-validate class="form-horizontal form-label-left">
 
                       <div class="form-group">
@@ -152,7 +150,7 @@
                       <div class="form-group">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
 						  <button type="submit" class="btn btn-success">Kaydet</button>
-                          <button type="button" class="btn btn-danger"  onclick="window.location.href='../index.php' ">İptal</button>
+                          <button type="button" class="btn btn-danger" onclick="window.location.href='../index.php' ">İptal</button>
 						  <button type="reset" class="btn btn-warning" >Temizle</button>
                         </div>
                       </div>
@@ -160,18 +158,17 @@
                     </form>
                   </div>
                 </div>
+				
+				<div>
+					<?php echo $result; ?>   
+                </div>
+				
               </div>
             </div>
-		
-           
         </div>
-		
         <!-- /page content -->
-
-         
       </div>
     </div>
-	
 	<!-- footer content -->
         <footer>
           <div class="pull-right">
@@ -189,8 +186,6 @@
     <script src="../vendors/fastclick/lib/fastclick.js"></script>
     <!-- NProgress -->
     <script src="../vendors/nprogress/nprogress.js"></script>
-    <!-- Chart.js -->
-    <script src="../vendors/Chart.js/dist/Chart.min.js"></script>
     <!-- gauge.js -->
     <script src="../vendors/gauge.js/dist/gauge.min.js"></script>
     <!-- bootstrap-progressbar -->
@@ -211,14 +206,7 @@
     <script src="../vendors/flot.curvedlines/curvedLines.js"></script>
     <!-- DateJS -->
     <script src="../vendors/DateJS/build/date.js"></script>
-    <!-- JQVMap -->
-    <script src="../vendors/jqvmap/dist/jquery.vmap.js"></script>
-    <script src="../vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
-    <script src="../vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
-    <!-- bootstrap-daterangepicker -->
-    <script src="../vendors/moment/min/moment.min.js"></script>
-    <script src="../vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
-
+     
     <!-- Custom Theme Scripts -->
     <script src="../build/js/custom.min.js"></script>
 	
