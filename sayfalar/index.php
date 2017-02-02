@@ -46,7 +46,7 @@
                     <ul class="nav child_menu">
                       <li><a href="sayfalar/apart_ekle.php">Apart Ekle</a></li>
                       <li><a href="sayfalar/apart_duzenle.php">Apart Düzenle</a></li>
-                      <li><a href="sayfalar/apart_sil.php">Apart Sil</a></li>
+                      <li><a href="sayfalar/apart_kaldir.php">Apart Kaldır</a></li>
 					  <li><a href="sayfalar/apart_donemi_ac.php">Apart Dönemi Aç</a></li>
                     </ul>
                   </li>
@@ -56,7 +56,7 @@
                     <ul class="nav child_menu">
                       <li><a href="sayfalar/rezervasyon_yap.php">Rezervasyon Yap</a></li>
                       <li><a href="sayfalar/rezervasyon_guncelle.php">Rezervasyon Güncelle</a></li>
-					  <li><a href="sayfalar/rezervasyon_sil.php">Rezervasyon İptal Et</a></li>
+					  <li><a href="sayfalar/rezervasyon_iptal_et.php">Rezervasyon İptal Et</a></li>
                     </ul>
                   </li>
 				  
@@ -64,7 +64,7 @@
                    
 				  <li><a href="sayfalar/apart_durumlari.php"><i class="fa fa-calendar"></i> Apart Durumları </a></li>
 				  
-                  <li><a href="sayfalar/etkinlikler.php"><i class="fa fa-exchange"></i>Apart Etkinlikleri </a></li>
+                  <li><a href="sayfalar/apart_etkinlikleri.php"><i class="fa fa-exchange"></i>Apart Etkinlikleri </a></li>
                                         
 				  <li><a href="sayfalar/istatistikler.php"><i class="fa fa-bar-chart-o"></i> İstatistikler</a></li>
 				  
