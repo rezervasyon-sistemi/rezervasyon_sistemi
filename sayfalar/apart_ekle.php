@@ -1,3 +1,32 @@
+<?php
+	
+	include "../fonksiyonlar/vt_baglantisi.php";
+	header('Content-Type: text/html; charset=utf-8');
+	
+	if( isset($_POST['apart_adi']) && isset($_POST['oda_tipi']) )
+	{
+		$conn=vtBaglantisi();
+		$apartAdi=$_POST['apart_adi'];
+		$odaTipi=$_POST['oda_tipi'];
+		
+		//INSERT INTO `apart` (`id`, `apart_no`, `oda_tipi`) VALUES (NULL, 'Apart-1', '2+1');
+		//$sql = "INSERT INTO `musteri` (`id`, `tc`, `ad`, `soyad`, `telefon`, `adres`) VALUES (NULL, \'11111111111\', \'Yunus Emre\', \'Küçük\', \'05555555555\', \'Barışkent Çanakkale Merkez\')";
+	
+		$sql = "INSERT INTO apart (id, apart_no, oda_tipi) VALUES (NULL, '$apartAdi', '$odaTipi') ";
+		if (mysqli_query($conn, $sql)) 
+		{
+			echo "Apart Başarıyla Eklenmiştir!";
+		} 
+		else 
+		{
+			echo "Apart Eklenememiştir! " . $sql . "<br>" . mysqli_error($conn);
+		}
+
+		mysqli_close($conn);
+	}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -103,20 +132,20 @@
                   </div>
                   <div class="x_content">
                     <br />
-                    <form align="center" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                    <form align="center" id="demo-form2" method="POST" data-parsley-validate class="form-horizontal form-label-left">
 
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Apart Adı <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12">
+                          <input type="text" id="apart_adi" name="apart_adi" required="required" class="form-control col-md-7 col-xs-12">
                         </div>	
                       </div>
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Oda Tipi <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input type="text" id="last-name" name="last-name" required="required" class="form-control col-md-7 col-xs-12">
+                          <input type="text" id="oda_tipi" name="oda_tipi" required="required" class="form-control col-md-7 col-xs-12">
                         </div>
                       </div>
                       <div class="ln_solid"></div>
