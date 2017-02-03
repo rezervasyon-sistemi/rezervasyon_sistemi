@@ -1,3 +1,30 @@
+<?php
+	
+	include "../fonksiyonlar/apart_islemleri.php";
+	header('Content-Type: text/html; charset=utf-8');
+
+	$divResult='';
+	  
+	if( isset($_POST['apart_no']))
+	{
+		$conn=vtBaglantisi();
+		$apartNo=$_POST['apart_no'];
+		$apartID=apartIDGetir($apartNo);
+		
+		$sql = "DELETE FROM apart WHERE id=$apartID ";
+		if (mysqli_query($conn, $sql)) 
+		{
+			$divResult='<div class="alert alert-success alert-dismissible fade in"><strong>Apart Başarıyla Sistemden Silinmiştir!</strong></div>';
+		} 
+		else 
+		{
+			$divResult='<div class="alert alert-danger alert-dismissible fade in"><strong>Apart Sistemden Silinememiştir! Hata: '.mysqli_error($conn).'</strong></div>';
+		} 
+		mysqli_close($conn);
+	}
+ 
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -7,7 +34,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Rezervasyon Sistemi </title>
+    <title>Rezervasyon Sistemi</title>
 
     <!-- Bootstrap -->
     <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -95,85 +122,100 @@
           
           <!-- /top tiles -->
 
-
-        
 			<div class="row">
-			
-			 <div class="col-md-12 col-sm-6 col-xs-12">
+			 			  <div class="col-md-12 col-sm-6 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
                     <h5>Sitemde Kayıtlı Olan Apartlar</h5>
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
-
-                    <table class="table table-hover">
-                      <thead>
-                        <tr>
-                          <th>#</th>
-                          <th>Apart Adı</th>
-                          <th>Oda Tipi</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <th scope="row">1</th>
-                          <td>Apart-1</td>
-                          <td>1+0</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">2</th>
-                          <td>Apart-2</td>
-                          <td>1+1</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">3</th>
-                          <td>Apart-3</td>
-                          <td>2+1</td>
-                        </tr>
-                      </tbody>
-                    </table>
-
+                      
+				  <?php
+					$conn=vtBaglantisi();
+					$sql="SELECT apart_no, oda_tipi FROM apart";
+					$result=mysqli_query($conn, $sql);
+					
+					$apartNo=array();
+                    print("<table class=\"table table-hover\">");
+                    print("<thead>");
+                    print("<tr>");
+                    print("<th>#</th>");
+                    print("<th>Apart Adı</th>");
+                    print("<th>Oda Tipi</th>");
+                    print("</tr>");
+                    print("</thead>");
+                    print("<tbody>");
+					if (mysqli_num_rows($result) > 0) 
+					{
+						$i=1;
+						while($row = mysqli_fetch_assoc($result)) 
+						{
+							print("<tr>");
+                            print("<th scope=\"row\">".$i."</th>");
+                            print("<td>".$row["apart_no"]."</td>");
+							print("<td>".$row["oda_tipi"]."</td>");
+							print("</tr>");
+							$i++;
+							$apartNo[]=$row["apart_no"];
+						}
+					} 
+					else 
+					{
+						print("<tr>");
+                        print("<th scope=\"row\">Sistemde Apart Kaydı Bulunmamaktadır</th>");
+					    print("</tr>");
+					}
+					print("</table>");
+					mysqli_close($conn);
+					?>
                   </div>
                 </div>
               </div>
-			
-              <div class="col-md-6 col-sm-6 col-xs-12">
+			 
+			  
+              <div class="col-md-12 col-sm-6 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
                     <h5>Sistemden Kaldırılacak Olan Apartı Seçiniz!</h5>
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
-                    <br />
-                    <form align="center" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                    <br/>
+                    <form name="apart_no" align="center" id="demo-form2" data-parsley-validate method="POST" class="form-horizontal form-label-left">
 
-					<div class="form-group">
-                        <label class="control-label col-md-5 col-sm-5 col-xs-12">Apartı Seçiniz</label>
-                        <div class="col-md-4 col-sm-9 col-xs-12">
-                          <select class="select2_single form-control" tabindex="-1">
-                            <option value="AK">Apart-1</option>
-                            <option value="HI">Apart-2</option>
-                            <option value="CA">Apart-3</option>
-                          </select>
-                        </div>
-                    </div>
-					
-                      <div class="ln_solid"></div>
-                      <div class="form-group">
-                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-						  <button type="submit" class="btn btn-success">Kaldır</button>
-                          <button type="button" class="btn btn-danger" onclick=" window.location.href='../index.php' ">İptal</button>
-                        </div>
-                      </div>
+						<div class="form-group">
+							<label class="control-label col-md-5 col-sm-5 col-xs-12">Apartı Seçiniz</label>
+							<div class="col-md-3 col-sm-9 col-xs-12">
+								<select name="apart_no" id="apart_no" class="select2_single form-control" tabindex="-1">
+									<?php for($i=0;$i<count($apartNo);$i++){  ?> 
+                        
+									<option value="<?php echo $apartNo[$i];?>" ><?php echo $apartNo[$i]; ?></option>
+                             
+									<?php } ?>
+							  </select>
+							</div>
+						</div>
+						
+						  <div class="ln_solid"></div>
+						  <div class="form-group">
+							<div class="col-md-6 col-sm-9 col-xs-12 col-md-offset-3">
+							  <button type="submit" class="btn btn-success">Kaldır</button>
+							  <button type="button" class="btn btn-danger" onclick=" window.location.href='../index.php' ">İptal</button>
+							</div>
+						  </div>
 
                     </form>
                   </div>
                 </div>
+				
+				<div>
+					<?php echo $divResult; ?>   
+                </div>
+				
               </div>
+			  
             </div>
-		
-           
         </div>
 		
         <!-- /page content -->
@@ -183,12 +225,12 @@
     </div>
 	
 	<!-- footer content -->
-        <footer>
-          <div class="pull-right">
-            Apart Rezevasyon Sistemi - @Ömer Yücel - Yunus Emre Küçük
-          </div>
-          <div class="clearfix"></div>
-        </footer>
+    <footer>
+        <div class="pull-right">
+        Apart Rezevasyon Sistemi - @Ömer Yücel - Yunus Emre Küçük
+		</div>
+    <div class="clearfix"></div>
+    </footer>
     <!-- /footer content -->
 
     <!-- jQuery -->
