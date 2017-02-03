@@ -4,7 +4,7 @@
 	header('Content-Type: text/html; charset=utf-8');
 
 	$divResult='';
-	  
+	 
 	if( isset($_POST['apart_no']))
 	{
 		$conn=vtBaglantisi();
@@ -132,42 +132,41 @@
                   <div class="x_content">
                       
 				  <?php
-					$conn=vtBaglantisi();
-					$sql="SELECT apart_no, oda_tipi FROM apart";
-					$result=mysqli_query($conn, $sql);
-					
+					 
+					$apartListesi=array(array());
+					$apartListesi=kayitliApartListesi();
+					 
 					$apartNo=array();
                     print("<table class=\"table table-hover\">");
                     print("<thead>");
                     print("<tr>");
                     print("<th>#</th>");
-                    print("<th>Apart Adı</th>");
+                    print("<th>Apart No</th>");
                     print("<th>Oda Tipi</th>");
                     print("</tr>");
                     print("</thead>");
                     print("<tbody>");
-					if (mysqli_num_rows($result) > 0) 
+					$uzunluk=count($apartListesi);
+					if ($uzunluk > 0) 
 					{
-						$i=1;
-						while($row = mysqli_fetch_assoc($result)) 
+						for($i=0;$i<$uzunluk;$i++)
 						{
 							print("<tr>");
-                            print("<th scope=\"row\">".$i."</th>");
-                            print("<td>".$row["apart_no"]."</td>");
-							print("<td>".$row["oda_tipi"]."</td>");
+							print("<th scope=\"row\">".($i+1)."</th>");
+							print("<td>".$apartListesi[$i][0]."</td>");
+							print("<td>".$apartListesi[$i][1]."</td>");
 							print("</tr>");
-							$i++;
-							$apartNo[]=$row["apart_no"];
+							$apartNo[]=$apartListesi[$i][0];
+							
 						}
 					} 
-					else
+					else 
 					{
 						print("<tr>");
-                        print("<th scope=\"row\">Sistemde Apart Kaydı Bulunmamaktadır</th>");
+                        print("<th scope=\"row\">Sistemde Apart Kaydı Bulunmamaktadır!</th>");
 					    print("</tr>");
 					}
 					print("</table>");
-					mysqli_close($conn);
 					?>
                   </div>
                 </div>
@@ -189,7 +188,7 @@
 							<div class="col-md-3 col-sm-9 col-xs-12">
 								<select name="apart_no" id="apart_no" class="select2_single form-control" tabindex="-1">
 									<?php for($i=0;$i<count($apartNo);$i++){  ?> 
-                        
+									 
 									<option value="<?php echo $apartNo[$i];?>" ><?php echo $apartNo[$i]; ?></option>
                              
 									<?php } ?>
