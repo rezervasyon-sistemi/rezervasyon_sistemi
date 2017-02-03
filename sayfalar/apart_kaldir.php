@@ -160,7 +160,7 @@
 							$apartNo[]=$row["apart_no"];
 						}
 					} 
-					else 
+					else
 					{
 						print("<tr>");
                         print("<th scope=\"row\">Sistemde Apart Kaydı Bulunmamaktadır</th>");
