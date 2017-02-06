@@ -59,6 +59,7 @@
                       <li><a href="rezervasyon_yap.php">Rezervasyon Yap</a></li>
                       <li><a href="rezervasyon_guncelle.php">Rezervasyon Güncelle</a></li>
 					  <li><a href="rezervasyon_iptal_et.php">Rezervasyon İptal Et</a></li>
+					  <li><a href="rezervasyon_sorgula.php">Rezervasyon Sorgula</a></li>
                     </ul>
                   </li>
 				  
@@ -94,9 +95,7 @@
         <div class="right_col" role="main">
           
           <!-- /top tiles -->
-
-
-        
+ 
 			<div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
@@ -110,8 +109,8 @@
                     <form align="center" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
 
 					<div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Apartı Seçiniz</label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
+                        <label class="control-label col-md-5 col-sm-6 col-xs-12">Apart Seçiniz</label>
+                        <div class="col-md-2 col-sm-6 col-xs-9">
                           <select class="select2_single form-control" tabindex="-1">
                             <option value="A1">Apart-1</option>
                             <option value="A2">Apart-2</option>
@@ -121,8 +120,8 @@
                       </div>
 					  
 					<div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Dönem Seçiniz</label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
+                        <label class="control-label col-md-5 col-sm-6 col-xs-12">Dönem Seçiniz</label>
+                        <div class="col-md-2 col-sm-6 col-xs-9">
                           <select class="select2_single form-control" tabindex="-1">
                             <option value="17">2017</option>
                             <option value="18">2018</option>
