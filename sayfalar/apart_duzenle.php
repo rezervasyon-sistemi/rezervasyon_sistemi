@@ -59,6 +59,7 @@
                       <li><a href="rezervasyon_yap.php">Rezervasyon Yap</a></li>
                       <li><a href="rezervasyon_guncelle.php">Rezervasyon Güncelle</a></li>
 					  <li><a href="rezervasyon_iptal_et.php">Rezervasyon İptal Et</a></li>
+					  <li><a href="rezervasyon_sorgula.php">Rezervasyon Sorgula</a></li>
                     </ul>
                   </li>
 				  
@@ -101,6 +102,39 @@
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
+                    <h5>Düzenlenecek Apartı Seçiniz!</h5>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <br />
+                    <form align="center" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+
+					<div class="form-group">
+                        <label class="control-label col-md-5 col-sm-6 col-xs-12">Apartı Seçiniz</label>
+                        <div class="col-md-2 col-sm-6 col-xs-9">
+                          <select class="select2_single form-control" tabindex="-1">
+                            <option value="AK">Apart-1</option>
+                            <option value="HI">Apart-2</option>
+                            <option value="CA">Apart-3</option>
+                          </select>
+                        </div>
+                      </div>
+					   
+                      <div class="ln_solid"></div>
+                      <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+							<button type="submit" class="btn btn-success">Getir</button>
+							<button type="button" class="btn btn-danger" onclick="window.location.href='../index.php' ">İptal</button>
+                        </div>
+                      </div>
+
+                    </form>
+                  </div>
+				   
+                </div>
+				
+				   <div class="x_panel">
+                  <div class="x_title">
                     <h5>Düzenlenecek Aparta Ait Bilgileri Giriniz!</h5>
                     <div class="clearfix"></div>
                   </div>
@@ -109,29 +143,17 @@
                     <form align="center" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
 
 					<div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Apartı Seçiniz</label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                          <select class="select2_single form-control" tabindex="-1">
-                            <option value="AK">Apart-1</option>
-                            <option value="HI">Apart-2</option>
-                            <option value="CA">Apart-3</option>
-                          </select>
-                        </div>
-                      </div>
-					  
-					<div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Yeni Apart Adı <span class="required">*</span>
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12">
+                        <label class="control-label col-md-4 col-sm-3 col-xs-3" for="first-name">Apart Adı <span class="required"></span></label>
+                        <div class="col-md-4 col-sm-5 col-xs-12">
+							<input type="text" id="first-name" required="required" placeholder="Apart Adı" class="form-control col-md-7 col-xs-12"></input>
                         </div>
                       </div>
 					 
 					<div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Yeni Oda Tipi <span class="required">*</span>
+                        <label class="control-label col-md-4 col-sm-5 col-xs-12" for="first-name">Oda Tipi <span class="required"></span>
                         </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12">
+                        <div class="col-md-4 col-sm-5 col-xs-12">
+                          <input type="text" id="first-name" required="required" placeholder="Oda Tipi" class="form-control col-md-7 col-xs-12"></input>
                         </div>
                       </div>
 					
@@ -139,15 +161,15 @@
                       <div class="form-group">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
 							<button type="submit" class="btn btn-success">Düzenle</button>
-                          <button type="button" class="btn btn-danger" onclick="window.location.href='../index.php' ">İptal</button>
-						  <button type="reset" class="btn btn-warning" >Temizle</button>
-                          
+							<button type="button" class="btn btn-danger" onclick="window.location.href='../index.php' ">İptal</button>
                         </div>
                       </div>
 
                     </form>
                   </div>
+				   
                 </div>
+				
               </div>
             </div>
 		
