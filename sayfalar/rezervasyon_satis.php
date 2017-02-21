@@ -1,3 +1,45 @@
+<?php
+
+	include "../fonksiyonlar/apart_islemleri.php";
+	include "../fonksiyonlar/donem_islemleri.php";
+	include "../fonksiyonlar/istatistik_islemleri.php";
+	include "../fonksiyonlar/rezervasyon_islemleri.php";
+	header('Content-Type: text/html; charset=utf-8');
+	
+	$apartNo='';
+	$divResult1='';$divResult3='';
+	$tarih=getdate();
+	
+	if( isset($_POST['rezervasyon_id']) && isset($_POST['donem_id']) )
+	{
+		$rezervasyonID=$_POST['rezervasyon_id'];
+		$donemID=$_POST['donem_id'];
+		//$acilanApartID=$_POST['acilan_apart_id'];
+		//$girisTarihi=$_POST['giris_tarihi'];
+		//$cikisTarihi=$_POST['cikis_tarihi'];
+		$gunSayisi=$_POST['gun_sayisi'];
+		$toplamTutar=$_POST['toplam_tutar'];
+		
+		if ( rezervasyonSatis($rezervasyonID, $gunSayisi, $toplamTutar) )
+		{
+			if( istatistikGuncelle($rezervasyonID, $donemID) )
+			{
+				$divResult3='<div class="alert alert-success alert-dismissible fade in"><strong>Rezarvasyon Satış İşlemi Başarıyla Geçekleştirilmiştir!</strong></div>';
+			}
+			else
+			{
+				$divResult3='<div class="alert alert-danger alert-dismissible fade in"><strong>İstatistik Güncellenememiştir!</strong></div>';
+			}
+		}
+		else
+		{
+			$divResult3='<div class="alert alert-danger alert-dismissible fade in"><strong>Rezervasyon Satış İşlemi Gerçekleştirilememiştir!</strong></div>';
+		}
+		
+		 
+	}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -57,18 +99,25 @@
                       <li><a href="rezervasyon_yap.php">Rezervasyon Yap</a></li>
                       <li><a href="rezervasyon_guncelle.php">Rezervasyon Güncelle</a></li>
 					  <li><a href="rezervasyon_iptal_et.php">Rezervasyon İptal Et</a></li>
+					  <li><a href="rezervasyon_sorgula.php">Rezervasyon Sorgula</a></li>
                     </ul>
                   </li>
 				  
-                  <li><a href="rezervasyon_satis.php"><i class="fa fa-money"></i> Rezervasyon Satış </a></li>
+                  <li><a href="rezervasyon_satis.php"><i class="fa fa-credit-card"></i> Rezervasyon Satış </a></li>
                    
 				  <li><a href="apart_durumlari.php"><i class="fa fa-calendar"></i> Apart Durumları </a></li>
 				  
                   <li><a href="apart_etkinlikleri.php"><i class="fa fa-exchange"></i>Apart Etkinlikleri </a></li>
                                         
-				  <li><a href="istatistikler.php"><i class="fa fa-bar-chart-o"></i> İstatistikler</a></li>
-				  
 				  <li><a href="musteri_bilgileri.php"><i class="fa fa-info-circle"></i> Müşteri Bilgileri </a></li>
+				
+				  <li>
+					<a><i class="fa fa-bar-chart-o"></i> İstatistikler <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="apart_istatistikleri.php">Apart İstatistikleri</a></li>
+                      <li><a href="donem_istatistikleri.php">Dönem İstatistikleri</a></li>
+                    </ul>
+                  </li>
                 </ul>
                  
               </div>
@@ -93,53 +142,78 @@
           <!-- /top tiles -->
 			<div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
+                
+				<div class="x_panel">
                   <div class="x_title">
                     <h5>Rezervasyon Sorgulamak İçin Aşağıdaki Verileri Giriniz!</h5>
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
-                    <br />
-                    <form align="center" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
-
-                      <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Müşteri Adı <span class="required">*</span>
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12">
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Müşteri Soyadı <span class="required">*</span>
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input type="text" id="last-name" name="last-name" required="required" class="form-control col-md-7 col-xs-12">
-                        </div>
-                      </div>
-					  				  
-                      <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Giriş Tarihi <span class="required">*</span>
+                    <br/>
+                    <form class="form-horizontal form-label-left" align="center" id="form1" name="form1" method="POST" data-parsley-validate>
+					
+					<div class="form-group">
+						<label class="control-label col-md-5 col-sm-5 col-xs-12">Apart Seçiniz</label>
+							<div class="col-md-2 col-sm-6 col-xs-9">
+								<?php
+									$donemID=donemIDGetir($tarih['year']);
+									$apartNoListesi=array();
+									$apartNoListesi=acilanApartNoListesi($donemID);
+									$uzunluk=count($apartNoListesi);
+									if( $uzunluk==0 ) 
+									{
+										$divResult1='<div class="alert alert-warning alert-dismissible fade in"><strong>Bu Dönem İçin Açılan Apart Kaydı Bulunmamaktadır!</strong></div>';
+									} 
+								?>
+										
+								<select class="select2_single form-control" name="apart_no" id="apart_no" tabindex="-1">
+									<?php for($i=0;$i<$uzunluk;$i++){  ?> 
+								
+										<option <?php if ($apartNoListesi[$i]==$apartNo) echo 'selected'; ?> value="<?php echo $apartNoListesi[$i];?>" ><?php echo $apartNoListesi[$i]; ?></option>
+												
+									<?php } ?>
+								</select>
+							</div>
+					</div>
+					
+					<div class="form-group">
+                        <label class="control-label col-md-5 col-sm-5 col-xs-12">Giriş Tarihi<span class="required"></span>
                         </label>						
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input type="text" class="form-control" required="required" data-inputmask="'mask': '99/99/9999'">
+                        <div class="col-md-2 col-sm-6 col-xs-9">
+                          <input  class="form-control" type="text" id="giris_tarihi" name="giris_tarihi" required="required" data-inputmask="'mask': '99.99.<?php echo $tarih['year'];?>'" />
                           <span class="fa fa-calendar form-control-feedback right" aria-hidden="true"></span>
                         </div>
                       </div>
 					  
                       <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Çıkış Tarihi <span class="required">*</span>
+                        <label class="control-label col-md-5 col-sm-5 col-xs-12">Çıkış Tarihi <span class="required"></span>
                         </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input type="text" class="form-control" required="required" data-inputmask="'mask': '99/99/9999'">
+                        <div class="col-md-2 col-sm-6 col-xs-9">
+                          <input class="form-control" type="text" id="cikis_tarihi" name="cikis_tarihi" required="required" data-inputmask="'mask': '99.99.<?php echo $tarih['year'];?>'" />
                           <span class="fa fa-calendar form-control-feedback right" aria-hidden="true"></span>
                         </div>
                       </div>
-									  
+						
+                        <div class="form-group">
+							<label class="control-label col-md-5 col-sm-5 col-xs-12" for="musteri-adi">Müşteri Adı<span class="required"></span></label>
+							<div class="col-md-2 col-sm-6 col-xs-9">
+								<input class="form-control col-md-7 col-xs-12" type="text" id="musteri_adi" name="musteri_adi" required="required" />
+								<span class="fa fa-info form-control-feedback right" aria-hidden="true"></span>
+							</div>
+						</div>
+								
+						<div class="form-group">
+							<label class="control-label col-md-5 col-sm-5 col-xs-12" for="musteri-soyadi">Müşteri Soyadı<span class="required"></span></label>
+							<div class="col-md-2 col-sm-6 col-xs-9">
+								<input class="form-control col-md-7 col-xs-12" type="text" id="musteri_soyadi" name="musteri_soyadi" required="required" />
+								<span class="fa fa-info form-control-feedback right" aria-hidden="true"></span>
+							</div>
+						</div>
+					  				  			  
                       <div class="ln_solid"></div>
                       <div class="form-group">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
 						  <button type="submit" class="btn btn-success">Sorgula</button>
-                          <button type="button" class="btn btn-danger" onclick=" window.location.href='../index.php' ">İptal</button>
                         </div>
                       </div>
 
@@ -147,66 +221,154 @@
 					
                   </div>
                 </div>
-              </div>
-            </div>
+				
+				<div>
+					<?php echo $divResult1; ?>   
+				</div>
+				
+			  </div>
 			 
-			<div class="row">
-                <div class="x_panel">
-					<div class="x_title">
-						<h5>Rezervasyon Satışı Onaylayınız!</h5>
-						<div class="clearfix"></div>
-					</div>
-					<div class="x_content">
-						<br/>		  
-						<table class="table table-hover">
-							<thead>
-								<tr>
-								  <th>#</th>
-								  <th>Apart Adı</th>						  
-								  <th>Müşteri Adı</th>
-								  <th>Müşteri Soyadı</th>
-								  <th>Giriş Tarihi</th>
-								  <th>Çıkış Tarihi</th>
-								  <th>Toplam Tutar</th>
-								  <th>Yatırılan Kapora</th>						  
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-								  <th scope="row">1</th>
-								  <th>Apart-1</th>
-								  <th>Yunus Emre</th>
-								  <th>Küçük</th>
-								  <th>17.06.2017</th>
-								  <th>20.06.2017</th>
-								  <th>300</th>
-								  <th>100</th>
-								</tr>
-							</tbody>
-						</table>
+            <div class="x_panel">
+				<div class="x_title">
+					<h5>Rezervasyon Satışı Onaylayınız!</h5>
+					<div class="clearfix"></div>
+				</div>
+				<div class="x_content">
+					<br/>
 
-						<form align="center" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">				  
-							
-							<div class="form-group">
-								<label class="control-label col-md-2 col-sm-3 col-xs-6" for="first-name">Tahsil Edilecek Tutar <span class="required">*</span></label>
-								<div class="col-md-1 col-sm-1 col-xs-2">
-									<input type="text" id="first-name" required="required" class="form-control col-md-3 col-xs-5" placeholder="TL">
-								</div>
+					<?php
+						$rezervasyonID=0;$acilanApartID=0;$donemID=0;
+						$girisTarihi="";$cikisTarihi="";$kontrol;
+						$toplamTutar=0;$gunSayisi=0;$kalanTutar=0;
+						if( isset($_POST['apart_no']) && isset($_POST['giris_tarihi']) && isset($_POST['cikis_tarihi']) )
+						{
+							$apartNo=$_POST['apart_no'];
+							$girisTarihi=$_POST['giris_tarihi'];
+							$cikisTarihi=$_POST['cikis_tarihi'];
+							$musteriAdi=$_POST['musteri_adi'];
+							$musteriSoyadi=$_POST['musteri_soyadi'];
+								
+							$apartID=apartIDGetir($apartNo);
+							$donemID=donemIDGetir($tarih['year']);
+							$acilanApartID=acilanApartIDGetir($apartID,$donemID);
+									
+							$gunSayisi=kacGun($girisTarihi, $cikisTarihi);
+									
+							$conn=vtBaglantisi();
+							mysqli_set_charset($conn, "utf8");		 
+							$sql="SELECT rezervasyon.id, rezervasyon.giris_tarihi, rezervasyon.cikis_tarihi, rezervasyon.fiyat, rezervasyon.kapora, apart.apart_no, musteri.ad, musteri.soyad, musteri.telefon FROM rezervasyon, apart, acilan_apart, musteri WHERE rezervasyon.giris_tarihi='$girisTarihi' AND rezervasyon.cikis_tarihi='$cikisTarihi' AND rezervasyon.acilan_apart_id='$acilanApartID' AND acilan_apart.apart_id=apart.id AND musteri.ad='$musteriAdi' AND musteri.soyad='$musteriSoyadi' AND musteri_id=musteri.id "; 
+                                     
+							$result=mysqli_query($conn, $sql);
+							if( mysqli_num_rows($result) > 0 )
+							{
+								print("<table class=\"table table-hover\">");
+								print("<thead>");
+								print("<tr>");
+								print("<th>Apart Adı</th>");
+								print("<th>Giriş Tarihi</th>");
+								print("<th>Çıkış Tarihi</th>");
+								print("<th>Gün Sayısı</th>");
+								print("<th>Müşteri Adı</th>");
+								print("<th>Müşteri Soyadı</th>");
+								print("<th>Müşteri Telefonu</th>");
+								print("<th>Fiyat</th>");
+								print("<th>Toplam Tutar</th>");
+								print("<th>Yatırılan Kapora</th>");
+								print("<th>Kalan Tutar</th>");
+								print("</tr>");
+								print("</thead>");
+								print("<tbody>");
+								print("<tr>");
+								$row = mysqli_fetch_assoc($result);
+								print("<td>".$row["apart_no"]."</td>");
+								print("<td>".$row["giris_tarihi"]."</td>");
+								print("<td>".$row["cikis_tarihi"]."</td>");
+								print("<td>".$gunSayisi." Gün"."</td>");
+								print("<td>".$row["ad"]."</td>");
+								print("<td>".$row["soyad"]."</td>");
+								print("<td>".$row["telefon"]."</td>");
+								print("<td>".$row["fiyat"]." TL"."</td>");
+								$toplamTutar=$row["fiyat"]*$gunSayisi;
+								print("<td>".$toplamTutar." TL"."</td>");
+								print("<td>".$row["kapora"]." TL"."</td>");	
+								$kalanTutar=$toplamTutar-$row["kapora"];
+								print("<td>".$kalanTutar." TL</td>");
+								print("</tr>");
+								print("</tbody>");
+								print("</table>");
+								$rezervasyonID=$row["id"];
+								$girisTarihi=$row["giris_tarihi"];
+								$cikisTarihi=$row["cikis_tarihi"];
+								$kontrol=true;
+							}
+							else
+							{
+								$kontrol=false;
+								$divResult2='<div class="alert alert-danger alert-dismissible fade in"><strong>Rezervasyon Bulunamadı!</strong></div>';
+								print("<div>");
+									echo $divResult2;
+								print("</div>");
+							}
+							mysqli_close($conn);
+						}
+						else
+						{
+							$divResult2='<div class="alert alert-warning alert-dismissible fade in"><strong>Rezervasyon Satış İçin Rezervasyonu Sorgulayınız!</strong></div>';
+							print("<div>");
+								 echo $divResult2;
+							print("</div>");
+						}
+								
+					?>
+					 
+					<form class="form-horizontal form-label-left" align="center" id="form1" name="form2" method="POST"  onsubmit="return confirm('Rezervasyon Satışı Onaylıyor Musunuz?')" data-parsley-validate>				  					
+						
+						<div class="form-group">
+							<div class="col-md-6 col-sm-6 col-xs-9 col-md-offset-3">
+								<input type="hidden" id="rezervasyon_id" name="rezervasyon_id" value="<?php echo "$rezervasyonID"; ?>" />
+								<input type="hidden" id="acilan_apart_id" name="acilan_apart_id" value="<?php echo "$acilanApartID"; ?>" />
+								<input type="hidden" id="donem_id" name="donem_id" value="<?php echo "$donemID"; ?>" />
+								<input type="hidden" id="giris_tarihi" name="giris_tarihi" value="<?php echo "$girisTarihi"; ?>" />
+								<input type="hidden" id="cikis_tarihi" name="cikis_tarihi" value="<?php echo "$cikisTarihi"; ?>" />
+								<input type="hidden" id="gun_sayisi" name="gun_sayisi" value="<?php echo "$gunSayisi"; ?>" />
+								<input type="hidden" id="toplam_tutar" name="toplam_tutar" value="<?php echo "$toplamTutar"; ?>" />
 							</div>
-							  
-							<div class="ln_solid"></div>
+						</div>
+						
+						<?php
+							if( isset($_POST['apart_no']) && isset($_POST['giris_tarihi']) && isset($_POST['cikis_tarihi']) )
+							{
+								if ( rezervasyonSatisVarMi($rezervasyonID) )
+								{
+									print("<div>");
+									print ("<div class=\"alert alert-warning alert-dismissible fade in\"><strong>Rezervasyon Satış İşlemi Önceden Yapılmıştır!</strong></div>");  
+									print("</div>");
+								}
+								else
+								{
+									if($kontrol==true)
+									{
+										print("<div class=\"ln_solid\"></div>");
+										print("<div class=\"form-group\">");
+										print("<div class=\"col-md-6 col-sm-6 col-xs-12 col-md-offset-3\">");
+										print("<button type=\"submit\" class=\"btn btn-success\">Onayla</button>");
+										print("<button type=\"button\" class=\"btn btn-danger\" onclick=\" window.location.href='../index.php' \">İptal</button>");
+										print("</div>");
+										print("</div>");
+									}
+								}
+							}
 							
-							<div class="form-group">
-								<div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-								  <button type="submit" class="btn btn-success">Onayla</button>
-								  <button type="button" class="btn btn-danger" onclick=" window.location.href='../index.php' ">İptal</button>
-								</div>
-							</div>
-							
-						</form>  
-					</div>
-                </div>
+						?> 
+							   
+					</form>  
+				</div>
             </div>
+			
+			<div>
+				<?php echo $divResult3; ?>   
+			</div>
+			</div>
         </div>
         <!-- /page content -->
       </div>
