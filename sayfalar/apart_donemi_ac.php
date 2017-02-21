@@ -1,3 +1,59 @@
+<?php
+	
+	include "../fonksiyonlar/apart_islemleri.php";
+	include "../fonksiyonlar/donem_islemleri.php";
+	include "../fonksiyonlar/istatistik_islemleri.php";
+	header('Content-Type: text/html; charset=utf-8');
+	
+	$divResult='';
+	$divResult2='';
+	
+	$bugun=getdate();
+	$donemYili=$bugun['year'];
+	
+	if( isset($_POST['donem_yili']) )
+	{
+		$donemYili=$_POST['donem_yili'];
+		
+		if ( donemEkle($donemYili) ) 
+		{	
+			$donemID=donemIDGetir($donemYili);
+			if( donemeIstatistikEkle($donemID) )
+			{
+				$divResult='<div class="alert alert-success alert-dismissible fade in"><strong>Dönem Başarıyla Sisteme Eklenmiştir!</strong></div>';
+			}
+			else
+			{
+				$divResult='<div class="alert alert-danger alert-dismissible fade in"><strong>Dönem İstatistiği Sisteme Eklenememiştir!</strong></div>';
+			}
+		} 
+		else 
+		{
+			$divResult='<div class="alert alert-danger alert-dismissible fade in"><strong>Dönem Sisteme Eklenememiştir!</strong></div>';
+		} 
+	}
+	
+	if( isset($_POST['apart_no']) && isset($_POST['apart_donem_yili']) && isset($_POST['kisi_sayisi']) )
+	{
+		$apartNo=$_POST['apart_no'];
+		$donemYili=$_POST['apart_donem_yili'];
+		$kisiSayisi=$_POST['kisi_sayisi'];
+		 
+		$apartID=apartIDGetir($apartNo);
+		$donemID=donemIDGetir($donemYili);
+		 
+		if( apartDonemiAc($apartNo, $donemYili, $kisiSayisi, $apartID, $donemID) )
+		{
+			$divResult2='<div class="alert alert-success alert-dismissible fade in"><strong>Apart Dönemi Başarıyla Açılmıştır!</strong></div>';
+		}
+		else
+		{
+			$divResult2='<div class="alert alert-danger alert-dismissible fade in"><strong>Apart Dönemi Açılamamıştır!</strong></div>';
+		}
+	}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -40,38 +96,44 @@
 			<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
               <div class="menu_section">
                  
-				 <ul class="nav side-menu">
-                  <li><a href="../index.php"><i class="fa fa-home"></i> Ana Sayfa </a></li>
-				  
-                  <li>
-					<a><i class="fa fa-plus-square"></i> Apart İşlemleri <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a href="apart_ekle.php">Apart Ekle</a></li>
-                      <li><a href="apart_duzenle.php">Apart Düzenle</a></li>
-                      <li><a href="apart_kaldir.php">Apart Kaldır</a></li>
-					  <li><a href="apart_donemi_ac.php">Apart Dönemi Aç</a></li>
-                    </ul>
-                  </li>
-				   
-                  <li>
-					<a><i class="fa fa-edit"></i> Rezervasyon İşlemleri <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a href="rezervasyon_yap.php">Rezervasyon Yap</a></li>
-                      <li><a href="rezervasyon_guncelle.php">Rezervasyon Güncelle</a></li>
-					  <li><a href="rezervasyon_iptal_et.php">Rezervasyon İptal Et</a></li>
-					  <li><a href="rezervasyon_sorgula.php">Rezervasyon Sorgula</a></li>
-                    </ul>
-                  </li>
-				  
-                  <li><a href="rezervasyon_satis.php"><i class="fa fa-money"></i> Rezervasyon Satış </a></li>
-                   
-				  <li><a href="apart_durumlari.php"><i class="fa fa-calendar"></i> Apart Durumları </a></li>
-				  
-                  <li><a href="apart_etkinlikleri.php"><i class="fa fa-exchange"></i>Apart Etkinlikleri </a></li>
-                                        
-				  <li><a href="istatistikler.php"><i class="fa fa-bar-chart-o"></i> İstatistikler</a></li>
-				  
-				  <li><a href="musteri_bilgileri.php"><i class="fa fa-info-circle"></i> Müşteri Bilgileri </a></li>
+				<ul class="nav side-menu">
+					<li><a href="../index.php"><i class="fa fa-home"></i> Ana Sayfa </a></li>
+					  
+					<li>
+						<a><i class="fa fa-plus-square"></i> Apart İşlemleri <span class="fa fa-chevron-down"></span></a>
+						<ul class="nav child_menu">
+						  <li><a href="apart_ekle.php">Apart Ekle</a></li>
+						  <li><a href="apart_duzenle.php">Apart Düzenle</a></li>
+						  <li><a href="apart_kaldir.php">Apart Kaldır</a></li>
+						  <li><a href="apart_donemi_ac.php">Apart Dönemi Aç</a></li>
+						</ul>
+					</li>
+					   
+					<li>
+						<a><i class="fa fa-edit"></i> Rezervasyon İşlemleri <span class="fa fa-chevron-down"></span></a>
+						<ul class="nav child_menu">
+						  <li><a href="rezervasyon_yap.php">Rezervasyon Yap</a></li>
+						  <li><a href="rezervasyon_guncelle.php">Rezervasyon Güncelle</a></li>
+						  <li><a href="rezervasyon_iptal_et.php">Rezervasyon İptal Et</a></li>
+						  <li><a href="rezervasyon_sorgula.php">Rezervasyon Sorgula</a></li>
+						</ul>
+					</li>
+					  
+					<li><a href="rezervasyon_satis.php"><i class="fa fa-credit-card"></i> Rezervasyon Satış </a></li>
+					  
+					<li><a href="apart_durumlari.php"><i class="fa fa-calendar"></i> Apart Durumları </a></li>
+					  
+					<li><a href="apart_etkinlikleri.php"><i class="fa fa-exchange"></i>Apart Etkinlikleri </a></li>
+										
+					<li><a href="musteri_bilgileri.php"><i class="fa fa-info-circle"></i> Müşteri Bilgileri </a></li>
+				
+					<li>
+						<a><i class="fa fa-bar-chart-o"></i> İstatistikler <span class="fa fa-chevron-down"></span></a>
+						<ul class="nav child_menu">
+						  <li><a href="apart_istatistikleri.php">Apart İstatistikleri</a></li>
+						  <li><a href="donem_istatistikleri.php">Dönem İstatistikleri</a></li>
+						</ul>
+					</li>
                 </ul>
                  
               </div>
@@ -93,72 +155,111 @@
 
         <!-- page content -->
         <div class="right_col" role="main">
-          
           <!-- /top tiles -->
- 
 			<div class="row">
-              <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h5>Açılacak Apartı ve Dönemini Seçiniz!</h5>
-                     
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                    <br />
-                    <form align="center" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
-
-					<div class="form-group">
-                        <label class="control-label col-md-5 col-sm-6 col-xs-12">Apart Seçiniz</label>
-                        <div class="col-md-2 col-sm-6 col-xs-9">
-                          <select class="select2_single form-control" tabindex="-1">
-                            <option value="A1">Apart-1</option>
-                            <option value="A2">Apart-2</option>
-                            <option value="A3">Apart-3</option>
-                          </select>
-                        </div>
-                      </div>
-					  
-					<div class="form-group">
-                        <label class="control-label col-md-5 col-sm-6 col-xs-12">Dönem Seçiniz</label>
-                        <div class="col-md-2 col-sm-6 col-xs-9">
-                          <select class="select2_single form-control" tabindex="-1">
-                            <option value="17">2017</option>
-                            <option value="18">2018</option>
-                            <option value="19">2019</option>
-							<option value="20">2020</option>
-							<option value="21">2021</option>
-							<option value="22">2022</option>
-							<option value="23">2023</option>
-							<option value="24">2024</option>
-							<option value="25">2025</option>
-                          </select>
-                        </div>
-                      </div>					  
-					  
+				<div class="col-md-12 col-sm-12 col-xs-12">
+					<div class="x_panel">
+						<div class="x_title">
+							<h5>Sisteme Dönem Ekleyiniz!</h5>
+							<div class="clearfix"></div>
+						</div>
+						<div class="x_content">
+							<br/>
+							<form align="center" id="form1" method="POST" data-parsley-validate class="form-horizontal form-label-left">
+								<div class="form-group">
+									<label class="control-label col-md-5 col-sm-6 col-xs-12">Dönem Seçiniz</label>
+									<div class="col-md-2 col-sm-6 col-xs-9">
+										<select name="donem_yili" id="donem_yili" class="select2_single form-control" tabindex="-1">
+											<option value="<?php echo $donemYili; ?>"><?php echo $donemYili; ?></option>
+										</select>
+									</div>
+								</div>					  
+								<div class="ln_solid"></div>
+								<div class="form-group">
+									<div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+										<button type="submit" class="btn btn-success">Dönem Ekle</button>
+										<button type="button" class="btn btn-danger" onclick=" window.location.href='../index.php' ">İptal</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
 					
-                      <div class="ln_solid"></div>
-                      <div class="form-group">
-                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-						 <button type="submit" class="btn btn-success">Dönem Aç</button>
-                          <button type="button" class="btn btn-danger" onclick=" window.location.href='../index.php' ">İptal</button>
-                         
-                        </div>
-                      </div>
+					<div>
+						<?php echo $divResult; ?>   
+					</div>
+					
+					<div class="x_panel">
+						<div class="x_title">
+							<h5>Açılacak Apartı ve Dönemini Seçiniz!</h5> 
+							<div class="clearfix"></div>
+						</div>
+						<div class="x_content">
+							<br/>
+							<form class="form-horizontal form-label-left" align="center" id="form2" name="form2" method="POST" onsubmit="return confirm('Aparta Dönem Açma İşlemini Onaylıyor Musunuz?')" data-parsley-validate>
 
-                    </form>
-                  </div>
-                </div>
-              </div>
+								<div class="form-group">
+									<label class="control-label col-md-5 col-sm-6 col-xs-12">Apart Seçiniz</label>
+									<div class="col-md-2 col-sm-6 col-xs-9">
+										<?php
+										
+											$apartNoListesi=array();
+											$apartNoListesi=kayitliApartNoListesi();
+											$uzunluk=count($apartNoListesi);
+											if ($uzunluk == 0) 
+											{
+												$divResult='<div class="alert alert-warning alert-dismissible fade in"><strong>Sistemde Apart Kaydı Bulunmamaktadır!</strong></div>';
+											} 
+										?>
+										
+										<select name="apart_no" id="apart_no" class="select2_single form-control" tabindex="-1">
+											<?php for($i=0;$i<$uzunluk;$i++){  ?> 
+											
+												<option value="<?php echo $apartNoListesi[$i];?>" ><?php echo $apartNoListesi[$i]; ?></option>
+											
+											<?php } ?>
+										</select>
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<label class="control-label col-md-5 col-sm-3 col-xs-3" for="kisi-sayisi">Kişi Sayısı<span class="required"></span></label>
+									<div class="col-md-2 col-sm-5 col-xs-12">
+										<input type="text" id="kisi_sayisi" name="kisi_sayisi" required="required" class="form-control col-md-7 col-xs-12"></input>
+										<span class="fa fa-info form-control-feedback right" aria-hidden="true"></span>
+									</div>	
+								</div>
+							  
+								<div class="form-group">
+									<label class="control-label col-md-5 col-sm-6 col-xs-12">Dönem Seçiniz</label>
+									<div class="col-md-2 col-sm-6 col-xs-9">
+									  <select name="apart_donem_yili" id="apart_donem_yili" class="select2_single form-control" tabindex="-1">
+										<option value="<?php echo $donemYili; ?>"><?php echo $donemYili; ?></option>
+									  </select>
+									</div>
+								</div>					  
+							   
+								<div class="ln_solid"></div>
+								
+								<div class="form-group">
+									<div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+									 <button type="submit" class="btn btn-success">Dönem Aç</button>
+									  <button type="button" class="btn btn-danger" onclick=" window.location.href='../index.php' ">İptal</button>
+									</div>
+								</div>
+
+							</form>
+						</div>
+					</div>	
+					
+					<div>
+						<?php echo $divResult2; ?>   
+					</div>
+				</div>
             </div>
-		
-           
         </div>
-		
         <!-- /page content -->
-
-         
-      </div>
+		</div>
     </div>
 	
 	<!-- footer content -->
