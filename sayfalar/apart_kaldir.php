@@ -7,20 +7,17 @@
 	 
 	if( isset($_POST['apart_no']))
 	{
-		$conn=vtBaglantisi();
 		$apartNo=$_POST['apart_no'];
 		$apartID=apartIDGetir($apartNo);
 		
-		$sql = "DELETE FROM apart WHERE id=$apartID ";
-		if (mysqli_query($conn, $sql)) 
+		if ( apartKaldir($apartID) ) 
 		{
-			$divResult='<div class="alert alert-success alert-dismissible fade in"><strong>Apart Başarıyla Sistemden Silinmiştir!</strong></div>';
+			$divResult='<div class="alert alert-success alert-dismissible fade in"><strong>Apart Başarıyla Sistemden Kaldırılmıştır!</strong></div>';
 		} 
 		else 
 		{
-			$divResult='<div class="alert alert-danger alert-dismissible fade in"><strong>Apart Sistemden Silinememiştir! Hata: '.mysqli_error($conn).'</strong></div>';
+			$divResult='<div class="alert alert-danger alert-dismissible fade in"><strong>Apart Sistemden Kaldırılamamıştır!</strong></div>';
 		} 
-		mysqli_close($conn);
 	}
  
 ?>
@@ -86,18 +83,26 @@
                       <li><a href="rezervasyon_yap.php">Rezervasyon Yap</a></li>
                       <li><a href="rezervasyon_guncelle.php">Rezervasyon Güncelle</a></li>
 					  <li><a href="rezervasyon_iptal_et.php">Rezervasyon İptal Et</a></li>
+					  <li><a href="rezervasyon_sorgula.php">Rezervasyon Sorgula</a></li>
                     </ul>
                   </li>
 				  
-                  <li><a href="rezervasyon_satis.php"><i class="fa fa-money"></i> Rezervasyon Satış </a></li>
+                  <li><a href="rezervasyon_satis.php"><i class="fa fa-credit-card"></i> Rezervasyon Satış </a></li>
                    
 				  <li><a href="apart_durumlari.php"><i class="fa fa-calendar"></i> Apart Durumları </a></li>
 				  
                   <li><a href="apart_etkinlikleri.php"><i class="fa fa-exchange"></i>Apart Etkinlikleri </a></li>
                                         
-				  <li><a href="istatistikler.php"><i class="fa fa-bar-chart-o"></i> İstatistikler</a></li>
-				  
 				  <li><a href="musteri_bilgileri.php"><i class="fa fa-info-circle"></i> Müşteri Bilgileri </a></li>
+				
+				  <li>
+					<a><i class="fa fa-bar-chart-o"></i> İstatistikler <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="apart_istatistikleri.php">Apart İstatistikleri</a></li>
+                      <li><a href="donem_istatistikleri.php">Dönem İstatistikleri</a></li>
+                    </ul>
+                  </li>
+				  
                 </ul>
                  
               </div>
@@ -123,7 +128,7 @@
           <!-- /top tiles -->
 
 			<div class="row">
-			 			  <div class="col-md-12 col-sm-6 col-xs-12">
+			 <div class="col-md-12 col-sm-6 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
                     <h5>Sitemde Kayıtlı Olan Apartlar</h5>
@@ -133,10 +138,10 @@
                       
 				  <?php
 					 
-					$apartListesi=array(array());
+					$apartListesi=array();
 					$apartListesi=kayitliApartListesi();
 					 
-					$apartNo=array();
+					$apartNoListesi=array();
                     print("<table class=\"table table-hover\">");
                     print("<thead>");
                     print("<tr>");
@@ -147,6 +152,7 @@
                     print("</thead>");
                     print("<tbody>");
 					$uzunluk=count($apartListesi);
+					 
 					if ($uzunluk > 0) 
 					{
 						for($i=0;$i<$uzunluk;$i++)
@@ -156,15 +162,12 @@
 							print("<td>".$apartListesi[$i][0]."</td>");
 							print("<td>".$apartListesi[$i][1]."</td>");
 							print("</tr>");
-							$apartNo[]=$apartListesi[$i][0];
-							
+							$apartNoListesi[]=$apartListesi[$i][0];
 						}
 					} 
 					else 
 					{
-						print("<tr>");
-                        print("<th scope=\"row\">Sistemde Apart Kaydı Bulunmamaktadır!</th>");
-					    print("</tr>");
+						$divResult='<div class="alert alert-warning alert-dismissible fade in"><strong>Sistemde Apart Kaydı Bulunmamaktadır!</strong></div>';
 					}
 					print("</table>");
 					?>
@@ -181,17 +184,18 @@
                   </div>
                   <div class="x_content">
                     <br/>
-                    <form name="apart_no" align="center" id="demo-form2" data-parsley-validate method="POST" class="form-horizontal form-label-left">
+                    <form class="form-horizontal form-label-left" align="center" id="form1" name="form1" method="POST" onsubmit="return confirm('Apart Kaldırma İşlemini Onaylıyor Musunuz?')" data-parsley-validate>
 
 						<div class="form-group">
-							<label class="control-label col-md-5 col-sm-5 col-xs-12">Apartı Seçiniz</label>
-							<div class="col-md-3 col-sm-9 col-xs-12">
+							<label class="control-label col-md-5 col-sm-6 col-xs-12">Apartı Seçiniz</label>
+							<div class="col-md-2 col-sm-6 col-xs-9">
 								<select name="apart_no" id="apart_no" class="select2_single form-control" tabindex="-1">
-									<?php for($i=0;$i<count($apartNo);$i++){  ?> 
+									<?php for($i=0;$i<count($apartNoListesi);$i++){  ?> 
 									 
-									<option value="<?php echo $apartNo[$i];?>" ><?php echo $apartNo[$i]; ?></option>
+									<option value="<?php echo $apartNoListesi[$i];?>" ><?php echo $apartNoListesi[$i]; ?></option>
                              
 									<?php } ?>
+									 
 							  </select>
 							</div>
 						</div>
