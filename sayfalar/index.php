@@ -57,18 +57,26 @@
                       <li><a href="sayfalar/rezervasyon_yap.php">Rezervasyon Yap</a></li>
                       <li><a href="sayfalar/rezervasyon_guncelle.php">Rezervasyon Güncelle</a></li>
 					  <li><a href="sayfalar/rezervasyon_iptal_et.php">Rezervasyon İptal Et</a></li>
+					  <li><a href="sayfalar/rezervasyon_sorgula.php">Rezervasyon Sorgula</a></li>
                     </ul>
                   </li>
 				  
-                  <li><a href="sayfalar/rezervasyon_satis.php"><i class="fa fa-money"></i> Rezervasyon Satış </a></li>
+                  <li><a href="sayfalar/rezervasyon_satis.php"><i class="fa fa-credit-card"></i> Rezervasyon Satış </a></li>
                    
 				  <li><a href="sayfalar/apart_durumlari.php"><i class="fa fa-calendar"></i> Apart Durumları </a></li>
 				  
                   <li><a href="sayfalar/apart_etkinlikleri.php"><i class="fa fa-exchange"></i>Apart Etkinlikleri </a></li>
-                                        
-				  <li><a href="sayfalar/istatistikler.php"><i class="fa fa-bar-chart-o"></i> İstatistikler</a></li>
-				  
+                   
 				  <li><a href="sayfalar/musteri_bilgileri.php"><i class="fa fa-info-circle"></i> Müşteri Bilgileri </a></li>
+				
+				  <li>
+					<a><i class="fa fa-bar-chart-o"></i> İstatistikler <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="sayfalar/apart_istatistikleri.php">Apart İstatistikleri</a></li>
+                      <li><a href="sayfalar/donem_istatistikleri.php">Dönem İstatistikleri</a></li>
+                    </ul>
+                  </li>
+ 
                 </ul>
 				
               </div>
@@ -95,12 +103,15 @@
 			<div align="center">
 				<div> 
 					<div class="x_content">
-						<span style="font-size:30px; color:black;">Apart Rezervasyon Sistemi</span>
+						<div class="alert alert-success" style="margin-left:300px; margin-right:300px;">
+							<span style="font-size:28px; color:black;">Apart Rezervasyon Sistemi</span>
+						</div>
+						<!--<span style="font-size:30px; color:black;">Apart Rezervasyon Sistemi</span>-->
 						</br> </br>
 						<p class="text-muted well well-sm no-shadow" style="margin-top: 100px; margin-left:300px; margin-right:300px;">
-							 <span id="span_tarih" style="font-size:50px; color:red;"></span></u>
+							 <span id="span_tarih" style="font-size:50px;"></span></u>
 							</br>
-							<span id="span_saat" style="font-size:60px; color:red;"></span>
+							<span id="span_saat" style="font-size:60px;"></span>
 						</p>
 						</br> </br> 
 					</div>
@@ -137,25 +148,20 @@
 			var saat=zaman.getHours();
 			var dakika=zaman.getMinutes();
 			var saniye=zaman.getSeconds();
-			suankiZaman=saat + ':' + ( (dakika<10) ? '0' : '' ) + dakika + ':' + ( (saniye<10) ? '0' : '' ) + saniye;
+			suankiZaman=( (saat<10) ? '0' : '' ) + saat + ':' + ( (dakika<10) ? '0' : '' ) + dakika + ':' + ( (saniye<10) ? '0' : '' ) + saniye;
 			span_saat.innerHTML=suankiZaman;
-			
 			setTimeout("saatOlustur()",1000);
 		}
 	</script>
 
-    <!-- jQuery -->
+	<!-- jQuery -->
     <script src="vendors/jquery/dist/jquery.min.js"></script>
     <!-- Bootstrap -->
     <script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- FastClick -->
     <script src="vendors/fastclick/lib/fastclick.js"></script>
-      
     <!-- gauge.js -->
     <script src="vendors/gauge.js/dist/gauge.min.js"></script>
-     
-    <!-- iCheck -->
-    <script src="vendors/iCheck/icheck.min.js"></script>
     <!-- Skycons -->
     <script src="vendors/skycons/skycons.js"></script>
     <!-- Flot -->
