@@ -59,7 +59,6 @@
 		<div class="col-md-3 left_col menu_fixed">
           <div class="left_col scroll-view">
              
-
             <!-- sidebar menu -->
 			<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
               <div class="menu_section">
