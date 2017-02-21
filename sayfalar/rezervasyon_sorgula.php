@@ -1,3 +1,15 @@
+<?php
+	
+	header('Content-Type: text/html; charset=utf-8');
+	include "../fonksiyonlar/apart_islemleri.php";
+	include "../fonksiyonlar/donem_islemleri.php";
+	
+	$tarih=getdate();
+	$apartNo='';
+	$girisTarihi='';$cikisTarihi='';
+	
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -61,15 +73,21 @@
                     </ul>
                   </li>
 				  
-                  <li><a href="rezervasyon_satis.php"><i class="fa fa-money"></i> Rezervasyon Satış </a></li>
+                  <li><a href="rezervasyon_satis.php"><i class="fa fa-credit-card"></i> Rezervasyon Satış </a></li>
                    
 				  <li><a href="apart_durumlari.php"><i class="fa fa-calendar"></i> Apart Durumları </a></li>
 				  
                   <li><a href="apart_etkinlikleri.php"><i class="fa fa-exchange"></i>Apart Etkinlikleri </a></li>
                                         
-				  <li><a href="istatistikler.php"><i class="fa fa-bar-chart-o"></i> İstatistikler</a></li>
-				  
 				  <li><a href="musteri_bilgileri.php"><i class="fa fa-info-circle"></i> Müşteri Bilgileri </a></li>
+				
+				  <li>
+					<a><i class="fa fa-bar-chart-o"></i> İstatistikler <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="apart_istatistikleri.php">Apart İstatistikleri</a></li>
+                      <li><a href="donem_istatistikleri.php">Dönem İstatistikleri</a></li>
+                    </ul>
+                  </li>
                 </ul>
 				  
               </div>
@@ -100,30 +118,43 @@
 						</div>
 						<div class="x_content">
 							<br/>
-							<form align="center" id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+							<form class="form-horizontal form-label-left" id="form1" name="form1" method="POST" align="center" data-parsley-validate >
 								<div class="form-group">
 									<label class="control-label col-md-5 col-sm-5 col-xs-12">Apart Seçiniz</label>
 									<div class="col-md-2 col-sm-6 col-xs-9">
-										<select class="select2_single form-control" tabindex="-1">
-											<option value="AK">Apart-1</option>
-											<option value="HI">Apart-2</option>
-											<option value="CA">Apart-3</option>
+										<?php
+											$donemID=donemIDGetir($tarih['year']);
+											$apartNoListesi=array();
+											$apartNoListesi=acilanApartNoListesi($donemID);
+											$uzunluk=count($apartNoListesi);
+											if( $uzunluk==0 ) 
+											{
+												$divResult1='<div class="alert alert-warning alert-dismissible fade in"><strong>Bu Dönem İçin Açılan Apart Kaydı Bulunmamaktadır!</strong></div>';
+											} 
+										?>
+									
+										<select class="select2_single form-control" name="apart_no" id="apart_no" tabindex="-1">
+											<?php for($i=0;$i<$uzunluk;$i++){  ?> 
+											
+												<option <?php if ($apartNoListesi[$i]==$apartNo) echo 'selected'; ?> value="<?php echo $apartNoListesi[$i];?>" ><?php echo $apartNoListesi[$i]; ?></option>
+											
+											<?php } ?>
 										</select>
 									</div>
 								</div>
 								
 								<div class="form-group">
-									<label class="control-label col-md-5 col-sm-5 col-xs-12">Giriş Tarihi <span class="required"></span></label>	
+									<label class="control-label col-md-5 col-sm-5 col-xs-12">Giriş Tarihi<span class="required"></span></label>	
 									<div class="col-md-2 col-sm-6 col-xs-9">
-										<input type="text" class="form-control" required="required" value="21/06/2016" data-inputmask="'mask': '99.99.9999'"></input>
+										<input class="form-control" type="text" id="giris_tarihi" name="giris_tarihi" required="required" data-inputmask="'mask': '99.99.<?php echo $tarih['year'];?>'" /><!--"'mask': '99.99.9999'"-->
 										<span class="fa fa-calendar form-control-feedback right" aria-hidden="true"></span>
 									</div>
 								</div>
 							  
 								<div class="form-group">
-									<label class="control-label col-md-5 col-sm-5 col-xs-12">Çıkış Tarihi <span class="required"></span></label>
+									<label class="control-label col-md-5 col-sm-5 col-xs-12">Çıkış Tarihi<span class="required"></span></label>
 									<div class="col-md-2 col-sm-6 col-xs-9">
-										<input type="text" class="form-control" required="required" value="21/06/2016" data-inputmask="'mask': '99.99.9999'"></input>
+										<input class="form-control" type="text" id="cikis_tarihi" name="cikis_tarihi" required="required" data-inputmask="'mask': '99.99.<?php echo $tarih['year'];?>'" />
 										<span class="fa fa-calendar form-control-feedback right" aria-hidden="true"></span>
 									</div>
 								</div>
@@ -147,41 +178,80 @@
 						</div>
 						<div class="x_content">
 							<br/>
-							 <table class="table table-hover">
-								<thead>
-									<tr>
-										<th>Giriş Tarihi</th>
-										<th>Çıkış Tarihi</th>
-										<th>Apart No</th>
-										<th>Kişi Sayısı</th>
-										<th>Fiyat</th>
-										<th>Yatırılan Kapora</th>
-										<th>Müşteri Adı</th>
-										<th>Müşteri Soyadı</th>
-										<th>Müşteri TC</th>
-										<th>Müşteri Telefonu</th>
-										<th>Müşteri Adresi</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>26.06.2017</th>
-										<td>27.06.2017</th>
-										<td>Apart-1</td>
-										<td>5 Kişi</td>
-										<td>100 TL</td>
-										<td>0 TL</td>
-										<td>Ömer</td>
-										<td>Yücel</td>
-										<td>012345678910</td>
-										<td>05554445080</td>
-										<td>Çanakkale</td>
-									</tr>
-								</tbody>
-							</table>
-							
+							<?php
+								if( isset($_POST['apart_no']) && isset($_POST['giris_tarihi']) && isset($_POST['cikis_tarihi']) )
+								{
+									$apartNo=$_POST['apart_no'];
+									$girisTarihi=$_POST['giris_tarihi'];
+									$cikisTarihi=$_POST['cikis_tarihi'];
+									
+									$apartID=apartIDGetir($apartNo);
+									$donemID=donemIDGetir($tarih['year']);
+									$acilanApartID=acilanApartIDGetir($apartID,$donemID);
+									
+									$conn=vtBaglantisi();
+									mysqli_set_charset($conn, "utf8");
+									 
+									$sql="SELECT rezervasyon.giris_tarihi, rezervasyon.cikis_tarihi, rezervasyon.islem_tarihi, rezervasyon.kisi_sayisi, rezervasyon.fiyat, rezervasyon.kapora, apart.apart_no, musteri.ad, musteri.soyad, musteri.tc, musteri.telefon, musteri.adres FROM rezervasyon,apart, acilan_apart, musteri WHERE rezervasyon.giris_tarihi='$girisTarihi' AND rezervasyon.cikis_tarihi='$cikisTarihi' AND rezervasyon.acilan_apart_id='$acilanApartID' AND acilan_apart.apart_id=apart.id AND musteri_id=musteri.id"; 
+                                    //$sql.="FROM rezervasyon,apart,musteri"; 
+									//$sql.="WHERE giris_tarihi='$girisTarihi' AND cikis_tarihi='$cikisTarihi' AND acilan_apart_id='$acilanApartID' AND musteri_id=musteri.id"; 
+									
+									$result=mysqli_query($conn, $sql);
+									if( mysqli_num_rows($result) > 0 )
+									{
+										print("<table class=\"table table-hover\">");
+										print("<thead>");
+										print("<tr>");
+										print("<th>Giriş Tarihi</th>");
+										print("<th>Çıkış Tarihi</th>");
+										print("<th>Apart No</th>");
+										print("<th>Kişi Sayısı</th>");
+										print("<th>Fiyat</th>");
+										print("<th>Yatırılan Kapora</th>");
+										print("<th>Müşteri Adı</th>");
+										print("<th>Müşteri Soyadı</th>");
+										print("<th>Müşteri TC</th>");
+										print("<th>Müşteri Telefonu</th>");
+										print("<th>Müşteri Adresi</th>");
+										print("</tr>");
+										print("</thead>");
+										print("<tbody>");
+										print("<tr>");
+										$row = mysqli_fetch_assoc($result);
+										print("<td>".$row["giris_tarihi"]."</td>");
+										print("<td>".$row["cikis_tarihi"]."</td>");
+										print("<td>".$row["apart_no"]."</td>");
+										print("<td>".$row["kisi_sayisi"]."</td>");
+										print("<td>".$row["fiyat"]." TL"."</td>");
+										print("<td>".$row["kapora"]." TL"."</td>");
+										print("<td>".$row["ad"]."</td>");
+										print("<td>".$row["soyad"]."</td>");
+										print("<td>".$row["tc"]."</td>");
+										print("<td>".$row["telefon"]."</td>");
+										print("<td>".$row["adres"]."</td>");
+										print("</tr>");
+										print("</tbody>");
+										print("</table>");
+									}
+									else
+									{
+										$divResult2='<div class="alert alert-danger alert-dismissible fade in"><strong>Rezervasyon Bulunamadı!</strong></div>';
+										print("<div>");
+											echo $divResult2;
+										print("</div>");
+									}
+									mysqli_close($conn);
+								}
+								else
+								{
+									$divResult2='<div class="alert alert-warning alert-dismissible fade in"><strong>Rezervasyonu Sorgulayınız!</strong></div>';
+									print("<div>");
+										 echo $divResult2;
+									print("</div>");
+								}
+								
+							?>
 							 
-							
 						</div>
 					</div>
 					
@@ -232,6 +302,8 @@
     <script src="../vendors/DateJS/build/date.js"></script>
     <!-- Custom Theme Scripts -->
     <script src="../build/js/custom.min.js"></script>
+	<!-- jquery.inputmask -->
+    <script src="../vendors/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
 	
   </body>
 </html>
