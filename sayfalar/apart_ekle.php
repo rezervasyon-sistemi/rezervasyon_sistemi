@@ -1,26 +1,22 @@
 <?php
 	
-	include "../fonksiyonlar/vt_baglantisi.php";
+	include "../fonksiyonlar/apart_islemleri.php";
 	header('Content-Type: text/html; charset=utf-8');
-	$result='';
+	$divResult='';
 	
 	if( isset($_POST['apart_adi']) && isset($_POST['oda_tipi']) )
 	{
-		$conn=vtBaglantisi();
 		$apartAdi=$_POST['apart_adi'];
 		$odaTipi=$_POST['oda_tipi'];
 		  
-		$sql = "INSERT INTO apart (id, apart_no, oda_tipi) VALUES (NULL, '$apartAdi', '$odaTipi') ";
-		if (mysqli_query($conn, $sql)) 
+		if ( apartEkle($apartAdi,$odaTipi) ) 
 		{
-			$result='<div class="alert alert-success alert-dismissible fade in"><strong>Apart Başarıyla Sisteme Eklenmiştir!</strong></div>';
+			$divResult='<div class="alert alert-success alert-dismissible fade in"><strong>Apart Başarıyla Sisteme Eklenmiştir!</strong></div>';
 		} 
 		else 
 		{
-			//echo "Apart Eklenememiştir! " . $sql . "<br>" . mysqli_error($conn);
-			$result='<div class="alert alert-danger alert-dismissible fade in"><strong>Apart Sisteme Eklenememiştir! Hata: '.mysqli_error($conn).'</strong></div>';
+			$divResult='<div class="alert alert-danger alert-dismissible fade in"><strong>Apart Sisteme Eklenememiştir!</strong></div>';
 		} 
-		mysqli_close($conn);
 	}
 
 ?>
@@ -44,7 +40,6 @@
     <link href="../vendors/nprogress/nprogress.css" rel="stylesheet">
     <!-- iCheck -->
     <link href="../vendors/iCheck/skins/flat/green.css" rel="stylesheet">
-	
     <!-- bootstrap-progressbar -->
     <link href="../vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
     <!-- JQVMap -->
@@ -86,18 +81,25 @@
                       <li><a href="rezervasyon_yap.php">Rezervasyon Yap</a></li>
                       <li><a href="rezervasyon_guncelle.php">Rezervasyon Güncelle</a></li>
 					  <li><a href="rezervasyon_iptal_et.php">Rezervasyon İptal Et</a></li>
+					  <li><a href="rezervasyon_sorgula.php">Rezervasyon Sorgula</a></li>
                     </ul>
                   </li>
 				  
-                  <li><a href="rezervasyon_satis.php"><i class="fa fa-money"></i> Rezervasyon Satış </a></li>
+                  <li><a href="rezervasyon_satis.php"><i class="fa fa-credit-card"></i> Rezervasyon Satış </a></li>
                    
 				  <li><a href="apart_durumlari.php"><i class="fa fa-calendar"></i> Apart Durumları </a></li>
 				  
                   <li><a href="apart_etkinlikleri.php"><i class="fa fa-exchange"></i>Apart Etkinlikleri </a></li>
                                         
-				  <li><a href="istatistikler.php"><i class="fa fa-bar-chart-o"></i> İstatistikler</a></li>
-				  
 				  <li><a href="musteri_bilgileri.php"><i class="fa fa-info-circle"></i> Müşteri Bilgileri </a></li>
+				
+				  <li>
+					<a><i class="fa fa-bar-chart-o"></i> İstatistikler <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="apart_istatistikleri.php">Apart İstatistikleri</a></li>
+                      <li><a href="donem_istatistikleri.php">Dönem İstatistikleri</a></li>
+                   </ul>
+                  </li>
                 </ul>
 				
               </div>
@@ -125,42 +127,42 @@
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h5>Ekelenek Aparta Ait Bilgileri Giriniz!</h5>
+                    <h5>Eklenek Aparta Ait Bilgileri Giriniz!</h5>
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
                     <br/>
-                    <form align="center" id="demo-form2" method="POST" data-parsley-validate class="form-horizontal form-label-left">
+                    <form class="form-horizontal form-label-left" align="center" id="form1" method="POST" onsubmit="return confirm('Apart Ekleme İşlemini Onaylıyor Musunuz?')" data-parsley-validate>
 
-                      <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Apart Adı <span class="required">*</span>
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input type="text" id="apart_adi" name="apart_adi" required="required" class="form-control col-md-7 col-xs-12">
-                        </div>	
-                      </div>
-                      <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Oda Tipi <span class="required">*</span>
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input type="text" id="oda_tipi" name="oda_tipi" required="required" class="form-control col-md-7 col-xs-12">
-                        </div>
-                      </div>
-                      <div class="ln_solid"></div>
-                      <div class="form-group">
-                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-						  <button type="submit" class="btn btn-success">Kaydet</button>
-                          <button type="button" class="btn btn-danger" onclick="window.location.href='../index.php' ">İptal</button>
-						  <button type="reset" class="btn btn-warning" >Temizle</button>
-                        </div>
-                      </div>
+						<div class="form-group">
+							<label class="control-label col-md-4 col-sm-3 col-xs-3" for="apart-adi">Apart Adı <span class="required"></span> </label>
+							<div class="col-md-4 col-sm-5 col-xs-12">
+								<input type="text" id="apart_adi" name="apart_adi" required="required" class="form-control col-md-7 col-xs-12" />
+								<span class="fa fa-info form-control-feedback right" aria-hidden="true"></span>
+							</div>	
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-4 col-sm-3 col-xs-3" for="oda-tipi">Oda Tipi <span class="required"></span></label>
+							<div class="col-md-4 col-sm-5 col-xs-12">
+								<input type="text" id="oda_tipi" name="oda_tipi" required="required" class="form-control col-md-7 col-xs-12" />
+								<span class="fa fa-info form-control-feedback right" aria-hidden="true"></span>
+							</div>
+						</div>
+						<div class="ln_solid"></div>
+						<div class="form-group">
+							<div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+								<button type="submit" class="btn btn-success">Ekle</button>
+								<button type="button" class="btn btn-danger" onclick="window.location.href='../index.php' ">İptal</button>
+								<button type="reset" class="btn btn-warning" >Temizle</button>
+							</div>
+						</div>
 
                     </form>
                   </div>
                 </div>
 				
 				<div>
-					<?php echo $result; ?>   
+					<?php echo $divResult; ?>   
                 </div>
 				
               </div>
